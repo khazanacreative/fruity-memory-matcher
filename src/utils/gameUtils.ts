@@ -1,5 +1,5 @@
 
-import { Apple, Banana, Cherry, Grape, Lemon, Orange, Strawberry, Pear, Coconut, Watermelon, Avocado, Kiwi, Mango, Pineapple, Peach, Fig, Plum, Pomegranate, Blueberry, Raspberry, Blackberry, Apricot, Papaya, Dragonfruit } from "lucide-react";
+import { Apple, Cherry, Leaf, CircleOff, Circle, CircleDot, Heart, Star, Flame, Cloud, Zap, Snowflake, Sun, Moon, Smile, Ghost, MessageCircle, Music, Camera, Coffee, Gift, Pizza, IceCream, Cake, Cookie, Candy, CircleUser, HeartHandshake } from "lucide-react";
 
 // Define types
 export interface Card {
@@ -12,32 +12,36 @@ export interface Card {
 
 export type GameState = 'idle' | 'playing' | 'paused' | 'completed';
 
-// All available fruit cards
+// All available fruit/food-related icons with friendly names
 export const fruitCards = [
   { type: 'apple', icon: Apple },
-  { type: 'banana', icon: Banana },
   { type: 'cherry', icon: Cherry },
-  { type: 'grape', icon: Grape },
-  { type: 'lemon', icon: Lemon },
-  { type: 'orange', icon: Orange },
-  { type: 'strawberry', icon: Strawberry },
-  { type: 'pear', icon: Pear },
-  { type: 'coconut', icon: Coconut },
-  { type: 'watermelon', icon: Watermelon },
-  { type: 'avocado', icon: Avocado },
-  { type: 'kiwi', icon: Kiwi },
-  { type: 'mango', icon: Mango },
-  { type: 'pineapple', icon: Pineapple },
-  { type: 'peach', icon: Peach },
-  { type: 'fig', icon: Fig },
-  { type: 'plum', icon: Plum },
-  { type: 'pomegranate', icon: Pomegranate },
-  { type: 'blueberry', icon: Blueberry },
-  { type: 'raspberry', icon: Raspberry },
-  { type: 'blackberry', icon: Blackberry },
-  { type: 'apricot', icon: Apricot },
-  { type: 'papaya', icon: Papaya },
-  { type: 'dragonfruit', icon: Dragonfruit }
+  { type: 'leaf', icon: Leaf },
+  { type: 'circle', icon: Circle },
+  { type: 'circle dot', icon: CircleDot },
+  { type: 'heart', icon: Heart },
+  { type: 'star', icon: Star },
+  { type: 'flame', icon: Flame },
+  { type: 'cloud', icon: Cloud },
+  { type: 'lightning', icon: Zap },
+  { type: 'snowflake', icon: Snowflake },
+  { type: 'sun', icon: Sun },
+  { type: 'moon', icon: Moon },
+  { type: 'smile', icon: Smile },
+  { type: 'ghost', icon: Ghost },
+  { type: 'message', icon: MessageCircle },
+  { type: 'music', icon: Music },
+  { type: 'camera', icon: Camera },
+  { type: 'coffee', icon: Coffee },
+  { type: 'gift', icon: Gift },
+  { type: 'pizza', icon: Pizza },
+  { type: 'ice cream', icon: IceCream },
+  { type: 'cake', icon: Cake },
+  { type: 'cookie', icon: Cookie },
+  { type: 'candy', icon: Candy },
+  { type: 'user', icon: CircleUser },
+  { type: 'handshake', icon: HeartHandshake },
+  { type: 'masked', icon: CircleOff }
 ];
 
 // Fisher-Yates shuffle algorithm
