@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -84,11 +85,65 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0'
+					},
+					'100%': {
+						opacity: '1'
+					}
+				},
+				'flip': {
+					'0%': {
+						transform: 'rotateY(0deg)'
+					},
+					'100%': {
+						transform: 'rotateY(180deg)'
+					}
+				},
+				'flip-back': {
+					'0%': {
+						transform: 'rotateY(180deg)'
+					},
+					'100%': {
+						transform: 'rotateY(0deg)'
+					}
+				},
+				'scale': {
+					'0%': {
+						transform: 'scale(1)'
+					},
+					'50%': {
+						transform: 'scale(1.05)'
+					},
+					'100%': {
+						transform: 'scale(1)'
+					}
+				},
+				'match-success': {
+					'0%': {
+						transform: 'scale(1)',
+						boxShadow: '0 0 0 rgba(74, 222, 128, 0)'
+					},
+					'50%': {
+						transform: 'scale(1.05)',
+						boxShadow: '0 0 15px rgba(74, 222, 128, 0.5)'
+					},
+					'100%': {
+						transform: 'scale(1)',
+						boxShadow: '0 0 0 rgba(74, 222, 128, 0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'flip': 'flip 0.5s ease-out forwards',
+				'flip-back': 'flip-back 0.5s ease-out forwards',
+				'scale': 'scale 0.5s ease-out',
+				'match-success': 'match-success 0.6s ease-out'
 			}
 		}
 	},
