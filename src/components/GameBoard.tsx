@@ -20,22 +20,17 @@ const GameBoard: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPlayerSetupOpen, setIsPlayerSetupOpen] = useState(true);
   const [players, setPlayers] = useState<Player[]>([]);
-  const [totalPairs] = useState(25); // Updated to 25 pairs
+  const [totalPairs] = useState(24);
   const [isShuffling, setIsShuffling] = useState(false);
 
   // Initialize game
-  const startNewGame = useCallback((
-    numPlayers: number = 2, 
-    playerNames: string[] = [], 
-    customCards?: CustomCardImage[],
-    useAlphabet: boolean = false
-  ) => {
+  const startNewGame = useCallback((numPlayers: number = 2, playerNames: string[] = [], customCards?: CustomCardImage[]) => {
     // Set game state to shuffling to show animation
     setGameState('shuffling');
     setIsShuffling(true);
     
     // Generate new cards
-    const newCards = initializeGame(customCards, useAlphabet);
+    const newCards = initializeGame(customCards);
     setCards(newCards);
     
     // Initialize players
@@ -175,13 +170,8 @@ const GameBoard: React.FC = () => {
   }, [gameState]);
   
   // Handle player setup completion
-  const handlePlayerSetup = (
-    numPlayers: number, 
-    playerNames: string[], 
-    customCards?: CustomCardImage[],
-    useAlphabet?: boolean
-  ) => {
-    startNewGame(numPlayers, playerNames, customCards, useAlphabet);
+  const handlePlayerSetup = (numPlayers: number, playerNames: string[], customCards?: CustomCardImage[]) => {
+    startNewGame(numPlayers, playerNames, customCards);
   };
   
   return (
@@ -206,7 +196,7 @@ const GameBoard: React.FC = () => {
             <PlayerScoreBoard players={players} />
           </div>
           
-          <div className="mt-6 grid grid-cols-5 sm:grid-cols-10 gap-2">
+          <div className="mt-6 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3 sm:gap-4">
             {cards.map(card => (
               <Card 
                 key={card.id}
