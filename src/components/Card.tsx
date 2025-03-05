@@ -61,11 +61,11 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
         {/* Card Back (Revealed) */}
         <div className="memory-card-back absolute inset-0 w-full h-full rounded-xl bg-white border border-gray-200 shadow-sm flex flex-col items-center justify-center transform-style-3d backface-hidden rotate-y-180">
           {customImage ? (
-            <div className="w-full h-2/3 rounded-t-xl overflow-hidden">
+            <div className="w-full h-2/3 rounded-t-xl overflow-hidden bg-gray-50 flex items-center justify-center">
               <img 
                 src={customImage} 
                 alt={customName || 'Custom card'} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
           ) : (

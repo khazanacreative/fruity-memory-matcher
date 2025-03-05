@@ -1,5 +1,5 @@
 
-import { Apple, Cherry, Leaf, CircleOff, Circle, CircleDot, Heart, Star, Flame, Cloud, Zap, Snowflake, Sun, Moon, Smile, Ghost, MessageCircle, Music, Camera, Coffee, Gift, Pizza, IceCream, Cake, Cookie, Candy, CircleUser, HeartHandshake } from "lucide-react";
+import { Apple, Cherry, Leaf, CircleOff, Circle, CircleDot, Heart, Star, Flame, Cloud, Zap, Snowflake, Sun, Moon, Smile, Ghost, MessageCircle, Music, Camera, Coffee, Gift, Pizza, IceCream, Cake, Cookie, Candy, CircleUser, HeartHandshake, Diamond, Hexagon, Target, Banana, Pencil, PenTool, Bell, Bird, Bookmark, Book, Coins, Crown, DollarSign, Map, Palette, Plane } from "lucide-react";
 import { CustomCardImage } from "@/components/CardUploader";
 
 // Define types
@@ -52,6 +52,22 @@ export const fruitCards = [
   { type: 'candy', icon: Candy },
   { type: 'user', icon: CircleUser },
   { type: 'handshake', icon: HeartHandshake },
+  { type: 'diamond', icon: Diamond },
+  { type: 'hexagon', icon: Hexagon },
+  { type: 'target', icon: Target },
+  { type: 'banana', icon: Banana },
+  { type: 'pencil', icon: Pencil },
+  { type: 'pen', icon: PenTool },
+  { type: 'bell', icon: Bell },
+  { type: 'bird', icon: Bird },
+  { type: 'bookmark', icon: Bookmark },
+  { type: 'book', icon: Book },
+  { type: 'coins', icon: Coins },
+  { type: 'crown', icon: Crown },
+  { type: 'dollar', icon: DollarSign },
+  { type: 'map', icon: Map },
+  { type: 'palette', icon: Palette },
+  { type: 'plane', icon: Plane },
   { type: 'masked', icon: CircleOff }
 ];
 
@@ -65,11 +81,11 @@ export const shuffleArray = <T>(array: T[]): T[] => {
   return newArray;
 };
 
-// Initialize a new game with 48 cards (24 pairs)
+// Initialize a new game with 50 cards (25 pairs)
 export const initializeGame = (customCards?: CustomCardImage[]): Card[] => {
   if (customCards && customCards.length > 0) {
     // Create pairs from the custom cards
-    const selectedCustomCards = shuffleArray(customCards).slice(0, 24);
+    const selectedCustomCards = shuffleArray(customCards).slice(0, 25);
     
     // Double the cards to create pairs and assign unique IDs
     let id = 0;
@@ -97,8 +113,8 @@ export const initializeGame = (customCards?: CustomCardImage[]): Card[] => {
     // Shuffle the pairs
     return shuffleArray(pairs);
   } else {
-    // Create pairs from the fruit cards (24 pairs = 48 cards)
-    const selectedPairs = shuffleArray(fruitCards).slice(0, 24);
+    // Create pairs from the fruit cards (25 pairs = 50 cards)
+    const selectedPairs = shuffleArray(fruitCards).slice(0, 25);
     
     // Double the cards to create pairs and assign unique IDs
     let id = 0;

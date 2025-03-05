@@ -22,7 +22,7 @@ const Index = () => {
       </main>
       
       <footer className="w-full py-4 text-center text-gray-500 text-sm">
-        <p>Take turns to find all 24 pairs and win! Use custom images for more fun.</p>
+        <p>Take turns to find all 25 pairs and win! Use custom images for more fun.</p>
       </footer>
     </div>
   );
