@@ -24,13 +24,18 @@ const GameBoard: React.FC = () => {
   const [isShuffling, setIsShuffling] = useState(false);
 
   // Initialize game
-  const startNewGame = useCallback((numPlayers: number = 2, playerNames: string[] = [], customCards?: CustomCardImage[]) => {
+  const startNewGame = useCallback((
+    numPlayers: number = 2, 
+    playerNames: string[] = [], 
+    customCards?: CustomCardImage[],
+    useAlphabet: boolean = false
+  ) => {
     // Set game state to shuffling to show animation
     setGameState('shuffling');
     setIsShuffling(true);
     
     // Generate new cards
-    const newCards = initializeGame(customCards);
+    const newCards = initializeGame(customCards, useAlphabet);
     setCards(newCards);
     
     // Initialize players
@@ -170,8 +175,13 @@ const GameBoard: React.FC = () => {
   }, [gameState]);
   
   // Handle player setup completion
-  const handlePlayerSetup = (numPlayers: number, playerNames: string[], customCards?: CustomCardImage[]) => {
-    startNewGame(numPlayers, playerNames, customCards);
+  const handlePlayerSetup = (
+    numPlayers: number, 
+    playerNames: string[], 
+    customCards?: CustomCardImage[],
+    useAlphabet?: boolean
+  ) => {
+    startNewGame(numPlayers, playerNames, customCards, useAlphabet);
   };
   
   return (

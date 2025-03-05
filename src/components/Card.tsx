@@ -20,6 +20,40 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
 
   // Get background color based on card type
   const getCardColor = () => {
+    // Special color map for alphabet cards
+    if (/^[A-Z]$/.test(type)) {
+      // Colors for alphabet cards A-Y
+      const alphabetColorMap: Record<string, string> = {
+        'A': 'from-red-50 to-red-100',
+        'B': 'from-blue-50 to-blue-100',
+        'C': 'from-green-50 to-green-100',
+        'D': 'from-yellow-50 to-yellow-100',
+        'E': 'from-purple-50 to-purple-100',
+        'F': 'from-pink-50 to-pink-100',
+        'G': 'from-orange-50 to-orange-100',
+        'H': 'from-teal-50 to-teal-100',
+        'I': 'from-cyan-50 to-cyan-100',
+        'J': 'from-indigo-50 to-indigo-100',
+        'K': 'from-violet-50 to-violet-100',
+        'L': 'from-rose-50 to-rose-100',
+        'M': 'from-amber-50 to-amber-100',
+        'N': 'from-lime-50 to-lime-100',
+        'O': 'from-emerald-50 to-emerald-100',
+        'P': 'from-sky-50 to-sky-100',
+        'Q': 'from-fuchsia-50 to-fuchsia-100',
+        'R': 'from-red-100 to-red-200',
+        'S': 'from-blue-100 to-blue-200',
+        'T': 'from-green-100 to-green-200',
+        'U': 'from-yellow-100 to-yellow-200',
+        'V': 'from-purple-100 to-purple-200',
+        'W': 'from-pink-100 to-pink-200',
+        'X': 'from-orange-100 to-orange-200',
+        'Y': 'from-teal-100 to-teal-200'
+      };
+      return alphabetColorMap[type] || 'from-gray-50 to-gray-100';
+    }
+
+    // Original color map for fruit/object cards
     const colorMap: Record<string, string> = {
       apple: 'from-red-50 to-red-100',
       cherry: 'from-pink-50 to-pink-100',
@@ -34,6 +68,9 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
     
     return colorMap[type] || 'from-gray-50 to-gray-100';
   };
+
+  // Check if it's an alphabet card
+  const isAlphabetCard = /^[A-Z]$/.test(type);
 
   return (
     <div 
@@ -78,12 +115,15 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
                 isMatched && "animate-match-success"
               )}>
                 {Icon && <Icon className="w-10 h-10 text-primary" strokeWidth={1.5} />}
+                {isAlphabetCard && !Icon && (
+                  <span className="text-4xl font-bold text-primary">{type}</span>
+                )}
               </div>
             </div>
           )}
           <div className="w-full h-1/3 flex items-center justify-center p-2">
             <span className="text-sm font-medium capitalize text-gray-700">
-              {customName || type}
+              {customName || (isAlphabetCard ? `Letter ${type}` : type)}
             </span>
           </div>
         </div>
