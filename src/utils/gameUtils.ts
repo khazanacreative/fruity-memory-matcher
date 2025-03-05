@@ -1,13 +1,17 @@
 
 import { Apple, Cherry, Leaf, CircleOff, Circle, CircleDot, Heart, Star, Flame, Cloud, Zap, Snowflake, Sun, Moon, Smile, Ghost, MessageCircle, Music, Camera, Coffee, Gift, Pizza, IceCream, Cake, Cookie, Candy, CircleUser, HeartHandshake } from "lucide-react";
+import { CustomCardImage } from "@/components/CardUploader";
 
 // Define types
 export interface Card {
   id: number;
   type: string;
-  icon: any;
+  icon?: any;
   isFlipped: boolean;
   isMatched: boolean;
+  isShuffling?: boolean;
+  customImage?: string;
+  customName?: string;
 }
 
 export interface Player {
@@ -17,7 +21,7 @@ export interface Player {
   isActive: boolean;
 }
 
-export type GameState = 'idle' | 'playing' | 'paused' | 'completed';
+export type GameState = 'idle' | 'playing' | 'paused' | 'completed' | 'shuffling';
 
 // All available fruit/food-related icons with friendly names
 export const fruitCards = [
@@ -52,7 +56,7 @@ export const fruitCards = [
 ];
 
 // Fisher-Yates shuffle algorithm
-const shuffleArray = <T>(array: T[]): T[] => {
+export const shuffleArray = <T>(array: T[]): T[] => {
   const newArray = [...array];
   for (let i = newArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -62,19 +66,50 @@ const shuffleArray = <T>(array: T[]): T[] => {
 };
 
 // Initialize a new game with 48 cards (24 pairs)
-export const initializeGame = (): Card[] => {
-  // Create pairs from the fruit cards (24 pairs = 48 cards)
-  const selectedPairs = shuffleArray(fruitCards).slice(0, 24);
-  
-  // Double the cards to create pairs and assign unique IDs
-  let id = 0;
-  const pairs = selectedPairs.flatMap(fruit => [
-    { id: id++, type: fruit.type, icon: fruit.icon, isFlipped: false, isMatched: false },
-    { id: id++, type: fruit.type, icon: fruit.icon, isFlipped: false, isMatched: false }
-  ]);
-  
-  // Shuffle the pairs
-  return shuffleArray(pairs);
+export const initializeGame = (customCards?: CustomCardImage[]): Card[] => {
+  if (customCards && customCards.length > 0) {
+    // Create pairs from the custom cards
+    const selectedCustomCards = shuffleArray(customCards).slice(0, 24);
+    
+    // Double the cards to create pairs and assign unique IDs
+    let id = 0;
+    const pairs = selectedCustomCards.flatMap(card => [
+      { 
+        id: id++, 
+        type: `custom-${card.id}`, 
+        isFlipped: false, 
+        isMatched: false,
+        customImage: card.url,
+        customName: card.name,
+        isShuffling: true 
+      },
+      { 
+        id: id++, 
+        type: `custom-${card.id}`, 
+        isFlipped: false, 
+        isMatched: false,
+        customImage: card.url,
+        customName: card.name,
+        isShuffling: true 
+      }
+    ]);
+    
+    // Shuffle the pairs
+    return shuffleArray(pairs);
+  } else {
+    // Create pairs from the fruit cards (24 pairs = 48 cards)
+    const selectedPairs = shuffleArray(fruitCards).slice(0, 24);
+    
+    // Double the cards to create pairs and assign unique IDs
+    let id = 0;
+    const pairs = selectedPairs.flatMap(fruit => [
+      { id: id++, type: fruit.type, icon: fruit.icon, isFlipped: false, isMatched: false, isShuffling: true },
+      { id: id++, type: fruit.type, icon: fruit.icon, isFlipped: false, isMatched: false, isShuffling: true }
+    ]);
+    
+    // Shuffle the pairs
+    return shuffleArray(pairs);
+  }
 };
 
 // Initialize players for multiplayer game

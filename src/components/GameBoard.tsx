@@ -7,6 +7,7 @@ import PlayerSetup from './PlayerSetup';
 import PlayerScoreBoard from './PlayerScoreBoard';
 import { Card as CardType, GameState, Player, initializeGame, initializePlayers, nextPlayerTurn } from '@/utils/gameUtils';
 import { toast } from "sonner";
+import { CustomCardImage } from './CardUploader';
 
 const GameBoard: React.FC = () => {
   const [cards, setCards] = useState<CardType[]>([]);
@@ -20,10 +21,16 @@ const GameBoard: React.FC = () => {
   const [isPlayerSetupOpen, setIsPlayerSetupOpen] = useState(true);
   const [players, setPlayers] = useState<Player[]>([]);
   const [totalPairs] = useState(24);
+  const [isShuffling, setIsShuffling] = useState(false);
 
   // Initialize game
-  const startNewGame = useCallback((numPlayers: number = 2, playerNames: string[] = []) => {
-    const newCards = initializeGame();
+  const startNewGame = useCallback((numPlayers: number = 2, playerNames: string[] = [], customCards?: CustomCardImage[]) => {
+    // Set game state to shuffling to show animation
+    setGameState('shuffling');
+    setIsShuffling(true);
+    
+    // Generate new cards
+    const newCards = initializeGame(customCards);
     setCards(newCards);
     
     // Initialize players
@@ -38,7 +45,6 @@ const GameBoard: React.FC = () => {
     }
     
     setPlayers(newPlayers);
-    setGameState('playing');
     setFlippedCards([]);
     setMoves(0);
     setMatchedPairs(0);
@@ -46,11 +52,26 @@ const GameBoard: React.FC = () => {
     setIsModalOpen(false);
     setIsProcessing(false);
     setIsPlayerSetupOpen(false);
+    
+    // After a short delay, set the game state to playing and remove shuffling flags
+    setTimeout(() => {
+      setIsShuffling(false);
+      setGameState('playing');
+      setCards(cards => 
+        cards.map(card => ({
+          ...card,
+          isShuffling: false
+        }))
+      );
+      
+      // Show toast about shuffling complete
+      toast.success("Cards shuffled! Game ready to start");
+    }, 1500);
   }, []);
   
   // Handle card click
   const handleCardClick = useCallback((clickedCard: CardType) => {
-    if (isProcessing || flippedCards.length >= 2) return;
+    if (isProcessing || flippedCards.length >= 2 || isShuffling) return;
     
     // If game is idle, start the game
     if (gameState === 'idle') {
@@ -68,7 +89,7 @@ const GameBoard: React.FC = () => {
     );
     
     setFlippedCards(prev => [...prev, clickedCard]);
-  }, [flippedCards, gameState, isProcessing]);
+  }, [flippedCards, gameState, isProcessing, isShuffling]);
   
   // Check for matches when two cards are flipped
   useEffect(() => {
@@ -149,8 +170,8 @@ const GameBoard: React.FC = () => {
   }, [gameState]);
   
   // Handle player setup completion
-  const handlePlayerSetup = (numPlayers: number, playerNames: string[]) => {
-    startNewGame(numPlayers, playerNames);
+  const handlePlayerSetup = (numPlayers: number, playerNames: string[], customCards?: CustomCardImage[]) => {
+    startNewGame(numPlayers, playerNames, customCards);
   };
   
   return (
@@ -180,7 +201,7 @@ const GameBoard: React.FC = () => {
               <Card 
                 key={card.id}
                 card={card}
-                isDisabled={isProcessing || gameState === 'completed'}
+                isDisabled={isProcessing || gameState === 'completed' || isShuffling}
                 onCardClick={handleCardClick}
               />
             ))}
