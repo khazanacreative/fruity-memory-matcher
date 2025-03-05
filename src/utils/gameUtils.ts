@@ -10,6 +10,13 @@ export interface Card {
   isMatched: boolean;
 }
 
+export interface Player {
+  id: number;
+  name: string;
+  score: number;
+  isActive: boolean;
+}
+
 export type GameState = 'idle' | 'playing' | 'paused' | 'completed';
 
 // All available fruit/food-related icons with friendly names
@@ -68,6 +75,27 @@ export const initializeGame = (): Card[] => {
   
   // Shuffle the pairs
   return shuffleArray(pairs);
+};
+
+// Initialize players for multiplayer game
+export const initializePlayers = (numPlayers: number): Player[] => {
+  return Array.from({ length: numPlayers }, (_, i) => ({
+    id: i + 1,
+    name: `Player ${i + 1}`,
+    score: 0,
+    isActive: i === 0 // First player starts
+  }));
+};
+
+// Move to next player's turn
+export const nextPlayerTurn = (players: Player[]): Player[] => {
+  const currentPlayerIndex = players.findIndex(player => player.isActive);
+  const nextPlayerIndex = (currentPlayerIndex + 1) % players.length;
+  
+  return players.map((player, index) => ({
+    ...player,
+    isActive: index === nextPlayerIndex
+  }));
 };
 
 // Format time from seconds to MM:SS

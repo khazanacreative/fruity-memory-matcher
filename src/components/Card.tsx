@@ -18,6 +18,23 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
     }
   };
 
+  // Get background color based on card type
+  const getCardColor = () => {
+    const colorMap: Record<string, string> = {
+      apple: 'from-red-50 to-red-100',
+      cherry: 'from-pink-50 to-pink-100',
+      leaf: 'from-green-50 to-green-100',
+      pizza: 'from-amber-50 to-amber-100',
+      'ice cream': 'from-blue-50 to-blue-100',
+      cake: 'from-purple-50 to-purple-100',
+      cookie: 'from-yellow-50 to-yellow-100',
+      candy: 'from-rose-50 to-rose-100',
+      coffee: 'from-amber-50 to-brown-100',
+    };
+    
+    return colorMap[type] || 'from-gray-50 to-gray-100';
+  };
+
   return (
     <div 
       className={cn(
@@ -42,12 +59,19 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
         {/* Card Back (Revealed) */}
         <div className="memory-card-back absolute inset-0 w-full h-full rounded-xl bg-white border border-gray-200 shadow-sm flex flex-col items-center justify-center transform-style-3d backface-hidden rotate-y-180">
           <div className={cn(
-            "w-16 h-16 rounded-full flex items-center justify-center",
-            isMatched && "animate-match-success"
+            "w-full h-2/3 rounded-t-xl bg-gradient-to-b p-4 flex items-center justify-center",
+            getCardColor()
           )}>
-            <Icon className="w-10 h-10 text-primary" strokeWidth={1.5} />
+            <div className={cn(
+              "w-16 h-16 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center",
+              isMatched && "animate-match-success"
+            )}>
+              <Icon className="w-10 h-10 text-primary" strokeWidth={1.5} />
+            </div>
           </div>
-          <span className="mt-2 text-sm font-medium capitalize text-gray-700">{type}</span>
+          <div className="w-full h-1/3 flex items-center justify-center p-2">
+            <span className="text-sm font-medium capitalize text-gray-700">{type}</span>
+          </div>
         </div>
       </div>
     </div>
