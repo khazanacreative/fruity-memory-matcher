@@ -90,8 +90,8 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
       return;
     }
     
-    // Only send up to 26 cards (for 26 pairs)
-    const finalCards = customCards.slice(0, 26);
+    // Increase limit to 36 pairs
+    const finalCards = customCards.slice(0, 36);
     onSaveCards(finalCards);
     onClose();
   };
@@ -104,7 +104,7 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
             Upload Custom Cards
           </DialogTitle>
           <DialogDescription className="text-center">
-            Upload your own images to create custom cards. Add up to 26 images for 26 pairs.
+            Upload your own images to create custom cards. Add up to 36 images for 36 pairs.
           </DialogDescription>
         </DialogHeader>
         
@@ -143,7 +143,7 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
             </div>
             
             <div className="text-sm text-muted-foreground flex justify-between">
-              <span>Added {customCards.length}/26 cards</span>
+              <span>Added {customCards.length}/36 cards</span>
               <span className="text-xs">(Click on "Upload" to select multiple files)</span>
             </div>
           </div>

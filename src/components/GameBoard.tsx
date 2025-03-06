@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import Card from './Card';
 import ScorePanel from './ScorePanel';
@@ -194,12 +193,9 @@ const GameBoard: React.FC = () => {
     startNewGame(numPlayers, playerNames, selectedCardType, customCards);
   };
   
-  // Determine grid columns based on card type (more columns for alphabet/numbers)
+  // Update the grid columns function to always show 12 cards per row
   const getGridColumns = () => {
-    if (cardType === 'alphabet' || cardType === 'numbers') {
-      return 'grid-cols-4 sm:grid-cols-13'; // 13 columns for 26 cards in a row on large screens
-    }
-    return 'grid-cols-5 sm:grid-cols-10'; // Default 10 columns
+    return 'grid-cols-4 sm:grid-cols-6 md:grid-cols-12';
   };
   
   return (

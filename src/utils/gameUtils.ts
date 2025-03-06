@@ -109,7 +109,7 @@ export const initializeGame = (
   customCards?: CustomCardImage[],
 ): Card[] => {
   let selectedCards: any[] = [];
-  let maxPairs = 26; // Default to 26 pairs (52 cards)
+  let maxPairs = 36; // Updated to 36 pairs
   
   switch (cardType) {
     case 'alphabet':
@@ -132,91 +132,85 @@ export const initializeGame = (
       selectedCards = shuffleArray(fruitCards).slice(0, maxPairs);
   }
   
-  // Double the cards to create pairs and assign unique IDs
+  // Fix TypeScript errors by using a proper map function instead of flatMap
   let id = 0;
-  const pairs = selectedCards.flatMap(card => {
+  const pairs: Card[] = [];
+  
+  selectedCards.forEach(card => {
     if ('letter' in card) {
       // Alphabet card
-      return [
-        { 
-          id: id++, 
-          type: card.type, 
-          letter: card.letter,
-          isFlipped: false, 
-          isMatched: false,
-          isShuffling: true 
-        },
-        { 
-          id: id++, 
-          type: card.type, 
-          letter: card.letter,
-          isFlipped: false, 
-          isMatched: false,
-          isShuffling: true 
-        }
-      ];
+      pairs.push({ 
+        id: id++, 
+        type: card.type, 
+        letter: card.letter,
+        isFlipped: false, 
+        isMatched: false,
+        isShuffling: true 
+      });
+      pairs.push({ 
+        id: id++, 
+        type: card.type, 
+        letter: card.letter,
+        isFlipped: false, 
+        isMatched: false,
+        isShuffling: true 
+      });
     } else if ('number' in card) {
       // Number card
-      return [
-        { 
-          id: id++, 
-          type: card.type, 
-          number: card.number,
-          isFlipped: false, 
-          isMatched: false,
-          isShuffling: true 
-        },
-        { 
-          id: id++, 
-          type: card.type, 
-          number: card.number,
-          isFlipped: false, 
-          isMatched: false,
-          isShuffling: true 
-        }
-      ];
+      pairs.push({ 
+        id: id++, 
+        type: card.type, 
+        number: card.number,
+        isFlipped: false, 
+        isMatched: false,
+        isShuffling: true 
+      });
+      pairs.push({ 
+        id: id++, 
+        type: card.type, 
+        number: card.number,
+        isFlipped: false, 
+        isMatched: false,
+        isShuffling: true 
+      });
     } else if ('url' in card) {
       // Custom image card
-      return [
-        { 
-          id: id++, 
-          type: `custom-${card.id}`, 
-          isFlipped: false, 
-          isMatched: false,
-          customImage: card.url,
-          customName: card.name,
-          isShuffling: true 
-        },
-        { 
-          id: id++, 
-          type: `custom-${card.id}`, 
-          isFlipped: false, 
-          isMatched: false,
-          customImage: card.url,
-          customName: card.name,
-          isShuffling: true 
-        }
-      ];
+      pairs.push({ 
+        id: id++, 
+        type: `custom-${card.id}`, 
+        isFlipped: false, 
+        isMatched: false,
+        customImage: card.url,
+        customName: card.name,
+        isShuffling: true 
+      });
+      pairs.push({ 
+        id: id++, 
+        type: `custom-${card.id}`, 
+        isFlipped: false, 
+        isMatched: false,
+        customImage: card.url,
+        customName: card.name,
+        isShuffling: true 
+      });
     } else {
       // Default icon card
-      return [
-        { 
-          id: id++, 
-          type: card.type, 
-          icon: card.icon, 
-          isFlipped: false, 
-          isMatched: false, 
-          isShuffling: true 
-        },
-        { 
-          id: id++, 
-          type: card.type, 
-          icon: card.icon, 
-          isFlipped: false, 
-          isMatched: false, 
-          isShuffling: true 
-        }
-      ];
+      pairs.push({ 
+        id: id++, 
+        type: card.type, 
+        icon: card.icon, 
+        isFlipped: false, 
+        isMatched: false, 
+        isShuffling: true 
+      });
+      pairs.push({ 
+        id: id++, 
+        type: card.type, 
+        icon: card.icon, 
+        isFlipped: false, 
+        isMatched: false, 
+        isShuffling: true 
+      });
     }
   });
   
