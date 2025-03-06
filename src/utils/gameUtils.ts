@@ -1,4 +1,3 @@
-
 import { Apple, Cherry, Leaf, CircleOff, Circle, CircleDot, Heart, Star, Flame, Cloud, Zap, Snowflake, Sun, Moon, Smile, Ghost, MessageCircle, Music, Camera, Coffee, Gift, Pizza, IceCream, Cake, Cookie, Candy, CircleUser, HeartHandshake } from "lucide-react";
 import { CustomCardImage } from "@/components/CardUploader";
 
@@ -12,7 +11,8 @@ export interface Card {
   isShuffling?: boolean;
   customImage?: string;
   customName?: string;
-  letter?: string; // Added for alphabet cards
+  letter?: string; // For alphabet cards
+  number?: number; // For number cards
 }
 
 export interface Player {
@@ -23,6 +23,7 @@ export interface Player {
 }
 
 export type GameState = 'idle' | 'playing' | 'paused' | 'completed' | 'shuffling';
+export type CardType = 'default' | 'alphabet' | 'numbers' | 'custom';
 
 // All available fruit/food-related icons with friendly names
 export const fruitCards = [
@@ -56,7 +57,7 @@ export const fruitCards = [
   { type: 'masked', icon: CircleOff }
 ];
 
-// Alphabet cards A-Y (25 letters)
+// Alphabet cards A-Z (26 letters)
 export const alphabetCards = [
   { type: 'letter-a', letter: 'A' },
   { type: 'letter-b', letter: 'B' },
@@ -82,8 +83,15 @@ export const alphabetCards = [
   { type: 'letter-v', letter: 'V' },
   { type: 'letter-w', letter: 'W' },
   { type: 'letter-x', letter: 'X' },
-  { type: 'letter-y', letter: 'Y' }
+  { type: 'letter-y', letter: 'Y' },
+  { type: 'letter-z', letter: 'Z' }
 ];
+
+// Number cards 1-25
+export const numberCards = Array.from({ length: 25 }, (_, i) => ({
+  type: `number-${i + 1}`,
+  number: i + 1
+}));
 
 // Fisher-Yates shuffle algorithm
 export const shuffleArray = <T>(array: T[]): T[] => {
@@ -95,78 +103,125 @@ export const shuffleArray = <T>(array: T[]): T[] => {
   return newArray;
 };
 
-// Initialize a new game with 50 cards (25 pairs)
-export const initializeGame = (customCards?: CustomCardImage[], useAlphabet: boolean = false): Card[] => {
-  if (useAlphabet) {
-    // Create pairs from alphabet cards (25 pairs = 50 cards)
-    const selectedAlphabetCards = alphabetCards.slice(0, 25); // Use all 25 alphabet cards
-    
-    // Double the cards to create pairs and assign unique IDs
-    let id = 0;
-    const pairs = selectedAlphabetCards.flatMap(card => [
-      { 
-        id: id++, 
-        type: card.type, 
-        letter: card.letter,
-        isFlipped: false, 
-        isMatched: false,
-        isShuffling: true 
-      },
-      { 
-        id: id++, 
-        type: card.type, 
-        letter: card.letter,
-        isFlipped: false, 
-        isMatched: false,
-        isShuffling: true 
+// Initialize a new game with cards based on the selected type
+export const initializeGame = (
+  cardType: CardType = 'default',
+  customCards?: CustomCardImage[],
+): Card[] => {
+  let selectedCards: any[] = [];
+  let maxPairs = 26; // Default to 26 pairs (52 cards)
+  
+  switch (cardType) {
+    case 'alphabet':
+      selectedCards = alphabetCards;
+      maxPairs = 26; // 26 letters in the alphabet
+      break;
+    case 'numbers':
+      selectedCards = numberCards;
+      maxPairs = 25; // Numbers 1-25
+      break;
+    case 'custom':
+      if (customCards && customCards.length > 0) {
+        // Use all provided custom cards, limit to maxPairs
+        selectedCards = shuffleArray(customCards).slice(0, maxPairs);
+        break;
       }
-    ]);
-    
-    // Shuffle the pairs
-    return shuffleArray(pairs);
-  } else if (customCards && customCards.length > 0) {
-    // Create pairs from the custom cards
-    const selectedCustomCards = shuffleArray(customCards).slice(0, 25);
-    
-    // Double the cards to create pairs and assign unique IDs
-    let id = 0;
-    const pairs = selectedCustomCards.flatMap(card => [
-      { 
-        id: id++, 
-        type: `custom-${card.id}`, 
-        isFlipped: false, 
-        isMatched: false,
-        customImage: card.url,
-        customName: card.name,
-        isShuffling: true 
-      },
-      { 
-        id: id++, 
-        type: `custom-${card.id}`, 
-        isFlipped: false, 
-        isMatched: false,
-        customImage: card.url,
-        customName: card.name,
-        isShuffling: true 
-      }
-    ]);
-    
-    // Shuffle the pairs
-    return shuffleArray(pairs);
-  } else {
-    // Create pairs from the fruit cards (25 pairs = 50 cards)
-    const selectedPairs = shuffleArray(fruitCards).slice(0, 25);
-    
-    // Double the cards to create pairs and assign unique IDs
-    let id = 0;
-    const pairs = selectedPairs.flatMap(fruit => [
-      { id: id++, type: fruit.type, icon: fruit.icon, isFlipped: false, isMatched: false, isShuffling: true },
-      { id: id++, type: fruit.type, icon: fruit.icon, isFlipped: false, isMatched: false, isShuffling: true }
-    ]);
-    
-    // Shuffle the pairs
-    return shuffleArray(pairs);
+      // Fallback to default if no custom cards
+    default:
+      // Default icon cards, limit to maxPairs
+      selectedCards = shuffleArray(fruitCards).slice(0, maxPairs);
   }
+  
+  // Double the cards to create pairs and assign unique IDs
+  let id = 0;
+  const pairs = selectedCards.flatMap(card => {
+    if ('letter' in card) {
+      // Alphabet card
+      return [
+        { 
+          id: id++, 
+          type: card.type, 
+          letter: card.letter,
+          isFlipped: false, 
+          isMatched: false,
+          isShuffling: true 
+        },
+        { 
+          id: id++, 
+          type: card.type, 
+          letter: card.letter,
+          isFlipped: false, 
+          isMatched: false,
+          isShuffling: true 
+        }
+      ];
+    } else if ('number' in card) {
+      // Number card
+      return [
+        { 
+          id: id++, 
+          type: card.type, 
+          number: card.number,
+          isFlipped: false, 
+          isMatched: false,
+          isShuffling: true 
+        },
+        { 
+          id: id++, 
+          type: card.type, 
+          number: card.number,
+          isFlipped: false, 
+          isMatched: false,
+          isShuffling: true 
+        }
+      ];
+    } else if ('url' in card) {
+      // Custom image card
+      return [
+        { 
+          id: id++, 
+          type: `custom-${card.id}`, 
+          isFlipped: false, 
+          isMatched: false,
+          customImage: card.url,
+          customName: card.name,
+          isShuffling: true 
+        },
+        { 
+          id: id++, 
+          type: `custom-${card.id}`, 
+          isFlipped: false, 
+          isMatched: false,
+          customImage: card.url,
+          customName: card.name,
+          isShuffling: true 
+        }
+      ];
+    } else {
+      // Default icon card
+      return [
+        { 
+          id: id++, 
+          type: card.type, 
+          icon: card.icon, 
+          isFlipped: false, 
+          isMatched: false, 
+          isShuffling: true 
+        },
+        { 
+          id: id++, 
+          type: card.type, 
+          icon: card.icon, 
+          isFlipped: false, 
+          isMatched: false, 
+          isShuffling: true 
+        }
+      ];
+    }
+  });
+  
+  // Shuffle the pairs
+  return shuffleArray(pairs);
 };
 
 // Initialize players for multiplayer game

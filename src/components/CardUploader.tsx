@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Upload, X, Check } from 'lucide-react';
+import { Upload, X, Check, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface CardUploaderProps {
@@ -25,41 +25,63 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
     const files = e.target.files;
     if (!files || files.length === 0) return;
     
-    const file = files[0];
-    
-    // Check if it's an image
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please upload only image files');
-      return;
-    }
-    
-    // Check file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('File size should be less than 5MB');
-      return;
-    }
-    
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (event.target && event.target.result) {
-        const newCard: CustomCardImage = {
-          id: Date.now(),
-          url: event.target.result.toString(),
-          name: currentName || `Card ${customCards.length + 1}`
-        };
-        
-        setCustomCards([...customCards, newCard]);
-        setCurrentName('');
-        toast.success('Card added successfully');
+    const fileArray = Array.from(files);
+    const validFiles = fileArray.filter(file => {
+      // Check if it's an image
+      if (!file.type.startsWith('image/')) {
+        toast.error(`${file.name} is not an image file`);
+        return false;
       }
-    };
+      
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(`${file.name} exceeds the 5MB size limit`);
+        return false;
+      }
+      
+      return true;
+    });
     
-    reader.readAsDataURL(file);
+    if (validFiles.length === 0) return;
+    
+    // Process each valid file
+    let processedCount = 0;
+    const totalFiles = validFiles.length;
+    
+    validFiles.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target && event.target.result) {
+          const newCard: CustomCardImage = {
+            id: Date.now() + index,
+            url: event.target.result.toString(),
+            name: currentName || `Card ${customCards.length + index + 1}`
+          };
+          
+          setCustomCards(prev => [...prev, newCard]);
+          processedCount++;
+          
+          if (processedCount === totalFiles) {
+            toast.success(`${totalFiles} card${totalFiles > 1 ? 's' : ''} added successfully`);
+            setCurrentName('');
+          }
+        }
+      };
+      
+      reader.readAsDataURL(file);
+    });
   };
   
   const removeCard = (id: number) => {
     setCustomCards(customCards.filter(card => card.id !== id));
     toast.info('Card removed');
+  };
+  
+  const clearAllCards = () => {
+    if (customCards.length > 0) {
+      setCustomCards([]);
+      toast.info('All cards removed');
+    }
   };
   
   const handleSave = () => {
@@ -68,8 +90,8 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
       return;
     }
     
-    // Only send up to 12 cards (for 24 pairs)
-    const finalCards = customCards.slice(0, 12);
+    // Only send up to 26 cards (for 26 pairs)
+    const finalCards = customCards.slice(0, 26);
     onSaveCards(finalCards);
     onClose();
   };
@@ -82,7 +104,7 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
             Upload Custom Cards
           </DialogTitle>
           <DialogDescription className="text-center">
-            Upload your own images to create custom cards. Add up to 12 images for 24 pairs.
+            Upload your own images to create custom cards. Add up to 26 images for 26 pairs.
           </DialogDescription>
         </DialogHeader>
         
@@ -91,7 +113,7 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
             <div className="flex gap-3">
               <input
                 type="text"
-                placeholder="Card name"
+                placeholder="Common name for cards (optional)"
                 className="flex-1 h-10 rounded-md border border-input px-3 py-2"
                 value={currentName}
                 onChange={(e) => setCurrentName(e.target.value)}
@@ -100,6 +122,7 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
                 <input
                   type="file"
                   accept="image/*"
+                  multiple
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   onChange={handleFileChange}
                 />
@@ -108,10 +131,20 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
                   Upload
                 </Button>
               </div>
+              {customCards.length > 0 && (
+                <Button 
+                  variant="outline" 
+                  className="h-10 text-destructive hover:text-destructive"
+                  onClick={clearAllCards}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              )}
             </div>
             
-            <div className="text-sm text-muted-foreground">
-              Added {customCards.length}/12 cards
+            <div className="text-sm text-muted-foreground flex justify-between">
+              <span>Added {customCards.length}/26 cards</span>
+              <span className="text-xs">(Click on "Upload" to select multiple files)</span>
             </div>
           </div>
           

@@ -13,7 +13,7 @@ const Index = () => {
         </h1>
         <p className="mt-3 text-gray-500 text-center max-w-xl">
           Match pairs of cards to win the game. Play with 2-3 players and take turns finding matching pairs. 
-          Choose from icon cards, alphabet cards (A-Y), or upload your own images!
+          Choose from icon cards, alphabet cards (A-Z), number cards (1-25), or upload your own images!
         </p>
       </header>
       
@@ -22,7 +22,7 @@ const Index = () => {
       </main>
       
       <footer className="w-full py-4 text-center text-gray-500 text-sm">
-        <p>Take turns to find all 25 pairs and win! Use alphabet cards or custom images for more fun.</p>
+        <p>Take turns to find all pairs and win! Use alphabet cards, number cards, or upload multiple custom images for more fun.</p>
       </footer>
     </div>
   );

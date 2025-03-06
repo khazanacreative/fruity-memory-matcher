@@ -5,7 +5,7 @@ import ScorePanel from './ScorePanel';
 import GameCompleteModal from './GameCompleteModal';
 import PlayerSetup from './PlayerSetup';
 import PlayerScoreBoard from './PlayerScoreBoard';
-import { Card as CardType, GameState, Player, initializeGame, initializePlayers, nextPlayerTurn } from '@/utils/gameUtils';
+import { Card as CardType, GameState, Player, CardType as CardTypeEnum, initializeGame, initializePlayers, nextPlayerTurn } from '@/utils/gameUtils';
 import { toast } from "sonner";
 import { CustomCardImage } from './CardUploader';
 
@@ -20,22 +20,32 @@ const GameBoard: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPlayerSetupOpen, setIsPlayerSetupOpen] = useState(true);
   const [players, setPlayers] = useState<Player[]>([]);
-  const [totalPairs] = useState(25); // 25 pairs (50 cards)
+  const [totalPairs, setTotalPairs] = useState(25); // Default 25 pairs
   const [isShuffling, setIsShuffling] = useState(false);
+  const [cardType, setCardType] = useState<CardTypeEnum>('default');
 
   // Initialize game
   const startNewGame = useCallback((
     numPlayers: number = 2, 
     playerNames: string[] = [], 
-    customCards?: CustomCardImage[],
-    useAlphabet: boolean = false
+    selectedCardType: CardTypeEnum = 'default',
+    customCards?: CustomCardImage[]
   ) => {
     // Set game state to shuffling to show animation
     setGameState('shuffling');
     setIsShuffling(true);
+    setCardType(selectedCardType);
+    
+    // Set total pairs based on card type
+    let pairsCount = 25; // Default
+    if (selectedCardType === 'alphabet') pairsCount = 26; // A-Z
+    else if (selectedCardType === 'numbers') pairsCount = 25; // 1-25
+    else if (selectedCardType === 'custom') pairsCount = customCards ? Math.min(customCards.length, 26) : 25;
+    
+    setTotalPairs(pairsCount);
     
     // Generate new cards
-    const newCards = initializeGame(customCards, useAlphabet);
+    const newCards = initializeGame(selectedCardType, customCards);
     setCards(newCards);
     
     // Initialize players
@@ -178,14 +188,22 @@ const GameBoard: React.FC = () => {
   const handlePlayerSetup = (
     numPlayers: number, 
     playerNames: string[], 
-    customCards?: CustomCardImage[],
-    useAlphabet?: boolean
+    selectedCardType: CardTypeEnum,
+    customCards?: CustomCardImage[]
   ) => {
-    startNewGame(numPlayers, playerNames, customCards, useAlphabet);
+    startNewGame(numPlayers, playerNames, selectedCardType, customCards);
+  };
+  
+  // Determine grid columns based on card type (more columns for alphabet/numbers)
+  const getGridColumns = () => {
+    if (cardType === 'alphabet' || cardType === 'numbers') {
+      return 'grid-cols-4 sm:grid-cols-13'; // 13 columns for 26 cards in a row on large screens
+    }
+    return 'grid-cols-5 sm:grid-cols-10'; // Default 10 columns
   };
   
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-4">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4">
       <PlayerSetup 
         isOpen={isPlayerSetupOpen}
         onClose={() => setIsPlayerSetupOpen(false)}
@@ -206,7 +224,7 @@ const GameBoard: React.FC = () => {
             <PlayerScoreBoard players={players} />
           </div>
           
-          <div className="mt-6 grid grid-cols-5 sm:grid-cols-10 gap-3 sm:gap-4">
+          <div className={`mt-6 grid ${getGridColumns()} gap-2 sm:gap-3`}>
             {cards.map(card => (
               <Card 
                 key={card.id}
