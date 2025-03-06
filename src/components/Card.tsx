@@ -81,18 +81,18 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
       <div 
         className={cn(
           "memory-card-inner absolute inset-0 w-full h-full transition-transform duration-500",
-          (isFlipped || isMatched) && "transform rotate-y-180"
+          (isFlipped || isMatched) && "rotate-y-180"
         )}
       >
         {/* Card Front (Hidden) */}
-        <div className="memory-card-front absolute inset-0 w-full h-full rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center transform-style-3d backface-hidden">
+        <div className="memory-card-front absolute inset-0 w-full h-full rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center preserve-3d">
           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/10 to-primary/30 flex items-center justify-center">
             <span className="text-2xl text-primary">?</span>
           </div>
         </div>
         
         {/* Card Back (Revealed) */}
-        <div className="memory-card-back absolute inset-0 w-full h-full rounded-xl bg-white border border-gray-200 shadow-sm flex flex-col items-center justify-center transform-style-3d backface-hidden rotate-y-180">
+        <div className="memory-card-back absolute inset-0 w-full h-full rounded-xl bg-white border border-gray-200 shadow-sm flex flex-col items-center justify-center preserve-3d">
           {customImage ? (
             <div className="w-full h-2/3 rounded-t-xl overflow-hidden">
               <img 

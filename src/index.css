@@ -94,15 +94,6 @@
     @apply bg-background text-foreground font-sans;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  
-  .preserve-3d {
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-  }
-  
-  .flip-card-back {
-    transform: rotateY(180deg);
-  }
 }
 
 /* Custom styles for memory match game */
@@ -125,8 +116,17 @@
   transform: rotateY(180deg);
 }
 
-.memory-card.flipped .memory-card-inner {
+.rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .memory-card.matched .memory-card-inner {
