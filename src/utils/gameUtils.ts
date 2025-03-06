@@ -1,4 +1,3 @@
-
 import { Apple, Cherry, Leaf, CircleOff, Circle, CircleDot, Heart, Star, Flame, Cloud, Zap, Snowflake, Sun, Moon, Smile, Ghost, MessageCircle, Music, Camera, Coffee, Gift, Pizza, IceCream, Cake, Cookie, Candy, CircleUser, HeartHandshake } from "lucide-react";
 import { CustomCardImage } from "@/components/CardUploader";
 
@@ -12,6 +11,7 @@ export interface Card {
   isShuffling?: boolean;
   customImage?: string;
   customName?: string;
+  letter?: string; // Added for alphabet cards
 }
 
 export interface Player {
@@ -55,6 +55,35 @@ export const fruitCards = [
   { type: 'masked', icon: CircleOff }
 ];
 
+// Alphabet cards A-Y (25 letters)
+export const alphabetCards = [
+  { type: 'letter-a', letter: 'A' },
+  { type: 'letter-b', letter: 'B' },
+  { type: 'letter-c', letter: 'C' },
+  { type: 'letter-d', letter: 'D' },
+  { type: 'letter-e', letter: 'E' },
+  { type: 'letter-f', letter: 'F' },
+  { type: 'letter-g', letter: 'G' },
+  { type: 'letter-h', letter: 'H' },
+  { type: 'letter-i', letter: 'I' },
+  { type: 'letter-j', letter: 'J' },
+  { type: 'letter-k', letter: 'K' },
+  { type: 'letter-l', letter: 'L' },
+  { type: 'letter-m', letter: 'M' },
+  { type: 'letter-n', letter: 'N' },
+  { type: 'letter-o', letter: 'O' },
+  { type: 'letter-p', letter: 'P' },
+  { type: 'letter-q', letter: 'Q' },
+  { type: 'letter-r', letter: 'R' },
+  { type: 'letter-s', letter: 'S' },
+  { type: 'letter-t', letter: 'T' },
+  { type: 'letter-u', letter: 'U' },
+  { type: 'letter-v', letter: 'V' },
+  { type: 'letter-w', letter: 'W' },
+  { type: 'letter-x', letter: 'X' },
+  { type: 'letter-y', letter: 'Y' }
+];
+
 // Fisher-Yates shuffle algorithm
 export const shuffleArray = <T>(array: T[]): T[] => {
   const newArray = [...array];
@@ -65,11 +94,38 @@ export const shuffleArray = <T>(array: T[]): T[] => {
   return newArray;
 };
 
-// Initialize a new game with 48 cards (24 pairs)
-export const initializeGame = (customCards?: CustomCardImage[]): Card[] => {
-  if (customCards && customCards.length > 0) {
+// Initialize a new game with 50 cards (25 pairs)
+export const initializeGame = (customCards?: CustomCardImage[], useAlphabet: boolean = false): Card[] => {
+  if (useAlphabet) {
+    // Create pairs from alphabet cards (25 pairs = 50 cards)
+    const selectedAlphabetCards = alphabetCards.slice(0, 25); // Use all 25 alphabet cards
+    
+    // Double the cards to create pairs and assign unique IDs
+    let id = 0;
+    const pairs = selectedAlphabetCards.flatMap(card => [
+      { 
+        id: id++, 
+        type: card.type, 
+        letter: card.letter,
+        isFlipped: false, 
+        isMatched: false,
+        isShuffling: true 
+      },
+      { 
+        id: id++, 
+        type: card.type, 
+        letter: card.letter,
+        isFlipped: false, 
+        isMatched: false,
+        isShuffling: true 
+      }
+    ]);
+    
+    // Shuffle the pairs
+    return shuffleArray(pairs);
+  } else if (customCards && customCards.length > 0) {
     // Create pairs from the custom cards
-    const selectedCustomCards = shuffleArray(customCards).slice(0, 24);
+    const selectedCustomCards = shuffleArray(customCards).slice(0, 25);
     
     // Double the cards to create pairs and assign unique IDs
     let id = 0;
@@ -97,8 +153,8 @@ export const initializeGame = (customCards?: CustomCardImage[]): Card[] => {
     // Shuffle the pairs
     return shuffleArray(pairs);
   } else {
-    // Create pairs from the fruit cards (24 pairs = 48 cards)
-    const selectedPairs = shuffleArray(fruitCards).slice(0, 24);
+    // Create pairs from the fruit cards (25 pairs = 50 cards)
+    const selectedPairs = shuffleArray(fruitCards).slice(0, 25);
     
     // Double the cards to create pairs and assign unique IDs
     let id = 0;

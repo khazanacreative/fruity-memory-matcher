@@ -10,7 +10,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
-  const { isFlipped, isMatched, icon: Icon, type, customImage, customName, isShuffling } = card;
+  const { isFlipped, isMatched, icon: Icon, type, customImage, customName, letter, isShuffling } = card;
   
   const handleClick = () => {
     if (!isFlipped && !isMatched && !isDisabled) {
@@ -18,8 +18,41 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
     }
   };
 
-  // Get background color based on card type
+  // Get background color based on card type or letter
   const getCardColor = () => {
+    if (type.startsWith('letter-')) {
+      // Generate color based on letter
+      const letterColors: Record<string, string> = {
+        'A': 'from-red-50 to-red-100',
+        'B': 'from-blue-50 to-blue-100',
+        'C': 'from-green-50 to-green-100',
+        'D': 'from-yellow-50 to-yellow-100',
+        'E': 'from-purple-50 to-purple-100',
+        'F': 'from-pink-50 to-pink-100',
+        'G': 'from-indigo-50 to-indigo-100',
+        'H': 'from-gray-50 to-gray-100',
+        'I': 'from-orange-50 to-orange-100',
+        'J': 'from-teal-50 to-teal-100',
+        'K': 'from-cyan-50 to-cyan-100',
+        'L': 'from-lime-50 to-lime-100',
+        'M': 'from-amber-50 to-amber-100',
+        'N': 'from-emerald-50 to-emerald-100',
+        'O': 'from-fuchsia-50 to-fuchsia-100',
+        'P': 'from-rose-50 to-rose-100',
+        'Q': 'from-sky-50 to-sky-100',
+        'R': 'from-violet-50 to-violet-100',
+        'S': 'from-slate-50 to-slate-100',
+        'T': 'from-zinc-50 to-zinc-100',
+        'U': 'from-neutral-50 to-neutral-100',
+        'V': 'from-stone-50 to-stone-100',
+        'W': 'from-red-50 to-pink-100',
+        'X': 'from-blue-50 to-purple-100',
+        'Y': 'from-green-50 to-yellow-100',
+      };
+      
+      return letter ? letterColors[letter] : 'from-gray-50 to-gray-100';
+    }
+
     const colorMap: Record<string, string> = {
       apple: 'from-red-50 to-red-100',
       cherry: 'from-pink-50 to-pink-100',
@@ -65,8 +98,20 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
               <img 
                 src={customImage} 
                 alt={customName || 'Custom card'} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
+            </div>
+          ) : letter ? (
+            <div className={cn(
+              "w-full h-2/3 rounded-t-xl bg-gradient-to-b p-4 flex items-center justify-center",
+              getCardColor()
+            )}>
+              <div className={cn(
+                "w-16 h-16 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center",
+                isMatched && "animate-match-success"
+              )}>
+                <span className="text-4xl font-bold text-primary">{letter}</span>
+              </div>
             </div>
           ) : (
             <div className={cn(
@@ -83,7 +128,7 @@ const Card: React.FC<CardProps> = ({ card, isDisabled, onCardClick }) => {
           )}
           <div className="w-full h-1/3 flex items-center justify-center p-2">
             <span className="text-sm font-medium capitalize text-gray-700">
-              {customName || type}
+              {customName || (letter ? `Letter ${letter}` : type)}
             </span>
           </div>
         </div>

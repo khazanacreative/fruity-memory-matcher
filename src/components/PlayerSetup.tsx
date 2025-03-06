@@ -4,13 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { User, Users, Images } from 'lucide-react';
+import { User, Users, Images, AlignJustify } from 'lucide-react';
 import CardUploader, { CustomCardImage } from './CardUploader';
 
 interface PlayerSetupProps {
   isOpen: boolean;
   onClose: () => void;
-  onStartGame: (numPlayers: number, playerNames: string[], customCards?: CustomCardImage[]) => void;
+  onStartGame: (numPlayers: number, playerNames: string[], customCards?: CustomCardImage[], useAlphabet?: boolean) => void;
 }
 
 const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame }) => {
@@ -18,7 +18,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
   const [playerNames, setPlayerNames] = useState<string[]>(['Player 1', 'Player 2', 'Player 3']);
   const [isCardUploaderOpen, setIsCardUploaderOpen] = useState(false);
   const [customCards, setCustomCards] = useState<CustomCardImage[]>([]);
-  const [useCustomCards, setUseCustomCards] = useState(false);
+  const [cardMode, setCardMode] = useState<'default' | 'custom' | 'alphabet'>('default');
 
   const handleNameChange = (index: number, name: string) => {
     const newNames = [...playerNames];
@@ -27,12 +27,17 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
   };
 
   const handleStartGame = () => {
-    onStartGame(numPlayers, playerNames.slice(0, numPlayers), useCustomCards ? customCards : undefined);
+    onStartGame(
+      numPlayers, 
+      playerNames.slice(0, numPlayers), 
+      cardMode === 'custom' ? customCards : undefined,
+      cardMode === 'alphabet'
+    );
   };
 
   const handleSaveCustomCards = (cards: CustomCardImage[]) => {
     setCustomCards(cards);
-    setUseCustomCards(true);
+    setCardMode('custom');
   };
 
   return (
@@ -83,22 +88,30 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
             
             <div className="flex flex-col gap-2">
               <Label>Game Cards</Label>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Button
-                  variant={!useCustomCards ? "default" : "outline"}
+                  variant={cardMode === 'default' ? "default" : "outline"}
                   className="flex-1 gap-2"
-                  onClick={() => setUseCustomCards(false)}
+                  onClick={() => setCardMode('default')}
                 >
-                  Default Cards
+                  Default Icons
                 </Button>
                 <Button
-                  variant={useCustomCards ? "default" : "outline"}
+                  variant={cardMode === 'alphabet' ? "default" : "outline"}
+                  className="flex-1 gap-2"
+                  onClick={() => setCardMode('alphabet')}
+                >
+                  <AlignJustify className="w-4 h-4" />
+                  Alphabet (A-Y)
+                </Button>
+                <Button
+                  variant={cardMode === 'custom' ? "default" : "outline"}
                   className="flex-1 gap-2"
                   onClick={() => setIsCardUploaderOpen(true)}
                 >
                   <Images className="w-4 h-4" />
-                  Custom Cards
-                  {useCustomCards && customCards.length > 0 && (
+                  Custom Images
+                  {cardMode === 'custom' && customCards.length > 0 && (
                     <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
                       {customCards.length}
                     </span>
