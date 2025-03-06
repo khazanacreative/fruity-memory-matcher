@@ -20,7 +20,7 @@ const GameBoard: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPlayerSetupOpen, setIsPlayerSetupOpen] = useState(true);
   const [players, setPlayers] = useState<Player[]>([]);
-  const [totalPairs] = useState(25); // Updated to 25 pairs
+  const [totalPairs] = useState(25); // 25 pairs (50 cards)
   const [isShuffling, setIsShuffling] = useState(false);
 
   // Initialize game
