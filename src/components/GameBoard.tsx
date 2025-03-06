@@ -28,7 +28,8 @@ const GameBoard: React.FC = () => {
     numPlayers: number = 2, 
     playerNames: string[] = [], 
     selectedCardType: CardTypeEnum = 'default',
-    customCards?: CustomCardImage[]
+    customCards?: CustomCardImage[],
+    numPairs?: number
   ) => {
     // Set game state to shuffling to show animation
     setGameState('shuffling');
@@ -36,15 +37,15 @@ const GameBoard: React.FC = () => {
     setCardType(selectedCardType);
     
     // Set total pairs based on card type
-    let pairsCount = 25; // Default
+    let pairsCount = 24; // Default is now 24 pairs
     if (selectedCardType === 'alphabet') pairsCount = 26; // A-Z
-    else if (selectedCardType === 'numbers') pairsCount = 25; // 1-25
-    else if (selectedCardType === 'custom') pairsCount = customCards ? Math.min(customCards.length, 26) : 25;
+    else if (selectedCardType === 'numbers') pairsCount = numPairs || 25; // Customizable
+    else if (selectedCardType === 'custom') pairsCount = customCards ? Math.min(customCards.length, 36) : 24;
     
     setTotalPairs(pairsCount);
     
     // Generate new cards
-    const newCards = initializeGame(selectedCardType, customCards);
+    const newCards = initializeGame(selectedCardType, customCards, numPairs);
     setCards(newCards);
     
     // Initialize players
@@ -188,9 +189,10 @@ const GameBoard: React.FC = () => {
     numPlayers: number, 
     playerNames: string[], 
     selectedCardType: CardTypeEnum,
-    customCards?: CustomCardImage[]
+    customCards?: CustomCardImage[],
+    numPairs?: number
   ) => {
-    startNewGame(numPlayers, playerNames, selectedCardType, customCards);
+    startNewGame(numPlayers, playerNames, selectedCardType, customCards, numPairs);
   };
   
   // Update the grid columns function to always show 12 cards per row

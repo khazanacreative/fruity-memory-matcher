@@ -25,7 +25,7 @@ export interface Player {
 export type GameState = 'idle' | 'playing' | 'paused' | 'completed' | 'shuffling';
 export type CardType = 'default' | 'alphabet' | 'numbers' | 'custom';
 
-// All available fruit/food-related icons with friendly names
+// Custom icons limited to 24 pairs
 export const fruitCards = [
   { type: 'apple', icon: Apple },
   { type: 'cherry', icon: Cherry },
@@ -50,11 +50,7 @@ export const fruitCards = [
   { type: 'pizza', icon: Pizza },
   { type: 'ice cream', icon: IceCream },
   { type: 'cake', icon: Cake },
-  { type: 'cookie', icon: Cookie },
-  { type: 'candy', icon: Candy },
-  { type: 'user', icon: CircleUser },
-  { type: 'handshake', icon: HeartHandshake },
-  { type: 'masked', icon: CircleOff }
+  { type: 'cookie', icon: Cookie }
 ];
 
 // Alphabet cards A-Z (26 letters)
@@ -87,8 +83,8 @@ export const alphabetCards = [
   { type: 'letter-z', letter: 'Z' }
 ];
 
-// Number cards 1-25
-export const numberCards = Array.from({ length: 25 }, (_, i) => ({
+// Generate number cards 1-36 (will be limited based on user selection)
+export const numberCards = Array.from({ length: 36 }, (_, i) => ({
   type: `number-${i + 1}`,
   number: i + 1
 }));
@@ -107,29 +103,29 @@ export const shuffleArray = <T>(array: T[]): T[] => {
 export const initializeGame = (
   cardType: CardType = 'default',
   customCards?: CustomCardImage[],
+  numPairs?: number
 ): Card[] => {
   let selectedCards: any[] = [];
-  let maxPairs = 36; // Updated to 36 pairs
   
   switch (cardType) {
     case 'alphabet':
       selectedCards = alphabetCards;
-      maxPairs = 26; // 26 letters in the alphabet
       break;
     case 'numbers':
-      selectedCards = numberCards;
-      maxPairs = 25; // Numbers 1-25
+      // Use the custom number of pairs (between 12 and 36)
+      const numCount = Math.min(Math.max(numPairs || 25, 12), 36);
+      selectedCards = numberCards.slice(0, numCount);
       break;
     case 'custom':
       if (customCards && customCards.length > 0) {
-        // Use all provided custom cards, limit to maxPairs
-        selectedCards = shuffleArray(customCards).slice(0, maxPairs);
+        // Use all provided custom cards, limit to 36 pairs
+        selectedCards = shuffleArray(customCards).slice(0, 36);
         break;
       }
       // Fallback to default if no custom cards
     default:
-      // Default icon cards, limit to maxPairs
-      selectedCards = shuffleArray(fruitCards).slice(0, maxPairs);
+      // Default icon cards, limit to 24 pairs
+      selectedCards = fruitCards.slice(0, 24);
   }
   
   // Fix TypeScript errors by using a proper map function instead of flatMap

@@ -1,16 +1,17 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { User, Users, Images, AlignJustify, Hash } from 'lucide-react';
+import { User, Users, Images, AlignJustify, Hash, Minus, Plus } from 'lucide-react';
 import CardUploader, { CustomCardImage } from './CardUploader';
 import { CardType } from '@/utils/gameUtils';
 
 interface PlayerSetupProps {
   isOpen: boolean;
   onClose: () => void;
-  onStartGame: (numPlayers: number, playerNames: string[], cardType: CardType, customCards?: CustomCardImage[]) => void;
+  onStartGame: (numPlayers: number, playerNames: string[], cardType: CardType, customCards?: CustomCardImage[], numPairs?: number) => void;
 }
 
 const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame }) => {
@@ -19,6 +20,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
   const [isCardUploaderOpen, setIsCardUploaderOpen] = useState(false);
   const [customCards, setCustomCards] = useState<CustomCardImage[]>([]);
   const [cardMode, setCardMode] = useState<CardType>('default');
+  const [numberPairs, setNumberPairs] = useState<number>(25);
 
   const handleNameChange = (index: number, name: string) => {
     const newNames = [...playerNames];
@@ -31,13 +33,26 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
       numPlayers, 
       playerNames.slice(0, numPlayers),
       cardMode,
-      cardMode === 'custom' ? customCards : undefined
+      cardMode === 'custom' ? customCards : undefined,
+      cardMode === 'numbers' ? numberPairs : undefined
     );
   };
 
   const handleSaveCustomCards = (cards: CustomCardImage[]) => {
     setCustomCards(cards);
     setCardMode('custom');
+  };
+
+  const increaseNumberPairs = () => {
+    if (numberPairs < 36) {
+      setNumberPairs(prev => prev + 1);
+    }
+  };
+
+  const decreaseNumberPairs = () => {
+    if (numberPairs > 12) {
+      setNumberPairs(prev => prev - 1);
+    }
   };
 
   return (
@@ -94,7 +109,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
                   className="flex-1 gap-2"
                   onClick={() => setCardMode('default')}
                 >
-                  Default Icons
+                  Default Icons (24 pairs)
                 </Button>
                 <Button
                   variant={cardMode === 'alphabet' ? "default" : "outline"}
@@ -110,7 +125,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
                   onClick={() => setCardMode('numbers')}
                 >
                   <Hash className="w-4 h-4" />
-                  Numbers (1-25)
+                  Numbers (1-{numberPairs})
                 </Button>
                 <Button
                   variant={cardMode === 'custom' ? "default" : "outline"}
@@ -126,6 +141,36 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
                   )}
                 </Button>
               </div>
+              
+              {cardMode === 'numbers' && (
+                <div className="flex items-center gap-2 mt-2">
+                  <Label className="text-sm">Number of pairs:</Label>
+                  <Button 
+                    size="icon" 
+                    variant="outline" 
+                    className="h-8 w-8"
+                    onClick={decreaseNumberPairs}
+                    disabled={numberPairs <= 12}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="px-2 py-1 border rounded-md min-w-10 text-center">
+                    {numberPairs}
+                  </span>
+                  <Button 
+                    size="icon" 
+                    variant="outline" 
+                    className="h-8 w-8"
+                    onClick={increaseNumberPairs}
+                    disabled={numberPairs >= 36}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                  <span className="text-xs text-muted-foreground ml-auto">
+                    (12-36 pairs)
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           

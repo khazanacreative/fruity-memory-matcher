@@ -13,7 +13,7 @@ const Index = () => {
         </h1>
         <p className="mt-3 text-gray-500 text-center max-w-xl">
           Match pairs of cards to win the game. Play with 2-3 players and take turns finding matching pairs. 
-          Choose from icon cards, alphabet cards (A-Z), number cards (1-25), or upload up to 36 custom images!
+          Choose from icon cards (24 pairs), alphabet cards (A-Z), number cards (12-36), or upload up to 36 custom images!
         </p>
       </header>
       
