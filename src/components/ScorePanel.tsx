@@ -23,12 +23,12 @@ const ScorePanel: React.FC<ScorePanelProps> = ({
     <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-gray-100">
       <div className="flex items-center gap-6">
         <div className="flex flex-col items-center">
-          <span className="text-sm text-gray-500 font-medium">Moves</span>
+          <span className="text-sm text-gray-500 font-medium">Langkah</span>
           <span className="text-2xl font-semibold text-gray-800">{moves}</span>
         </div>
         
         <div className="flex flex-col items-center">
-          <span className="text-sm text-gray-500 font-medium">Pairs</span>
+          <span className="text-sm text-gray-500 font-medium">Pasangan</span>
           <span className="text-2xl font-semibold text-gray-800">
             {matchedPairs}/{totalPairs}
           </span>
@@ -47,7 +47,7 @@ const ScorePanel: React.FC<ScorePanelProps> = ({
         onClick={onRestart}
       >
         <RotateCcw className="w-4 h-4" />
-        Restart
+        Mulai Ulang
       </Button>
     </div>
   );

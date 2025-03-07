@@ -29,13 +29,13 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
     const validFiles = fileArray.filter(file => {
       // Check if it's an image
       if (!file.type.startsWith('image/')) {
-        toast.error(`${file.name} is not an image file`);
+        toast.error(`${file.name} bukan file gambar`);
         return false;
       }
       
       // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        toast.error(`${file.name} exceeds the 5MB size limit`);
+        toast.error(`${file.name} melebihi batas ukuran 5MB`);
         return false;
       }
       
@@ -55,14 +55,14 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
           const newCard: CustomCardImage = {
             id: Date.now() + index,
             url: event.target.result.toString(),
-            name: currentName || `Card ${customCards.length + index + 1}`
+            name: currentName || `Kartu ${customCards.length + index + 1}`
           };
           
           setCustomCards(prev => [...prev, newCard]);
           processedCount++;
           
           if (processedCount === totalFiles) {
-            toast.success(`${totalFiles} card${totalFiles > 1 ? 's' : ''} added successfully`);
+            toast.success(`${totalFiles} kartu berhasil ditambahkan`);
             setCurrentName('');
           }
         }
@@ -74,19 +74,19 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
   
   const removeCard = (id: number) => {
     setCustomCards(customCards.filter(card => card.id !== id));
-    toast.info('Card removed');
+    toast.info('Kartu dihapus');
   };
   
   const clearAllCards = () => {
     if (customCards.length > 0) {
       setCustomCards([]);
-      toast.info('All cards removed');
+      toast.info('Semua kartu dihapus');
     }
   };
   
   const handleSave = () => {
     if (customCards.length < 2) {
-      toast.error('Please add at least 2 cards');
+      toast.error('Silakan tambahkan minimal 2 kartu');
       return;
     }
     
@@ -101,10 +101,10 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold">
-            Upload Custom Cards
+            Unggah Kartu Kustom
           </DialogTitle>
           <DialogDescription className="text-center">
-            Upload your own images to create custom cards. Add up to 36 images for 36 pairs.
+            Unggah gambar Anda sendiri untuk membuat kartu kustom. Tambahkan hingga 36 gambar untuk 36 pasangan.
           </DialogDescription>
         </DialogHeader>
         
@@ -113,7 +113,7 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
             <div className="flex gap-3">
               <input
                 type="text"
-                placeholder="Common name for cards (optional)"
+                placeholder="Nama umum untuk kartu (opsional)"
                 className="flex-1 h-10 rounded-md border border-input px-3 py-2"
                 value={currentName}
                 onChange={(e) => setCurrentName(e.target.value)}
@@ -128,7 +128,7 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
                 />
                 <Button variant="outline" className="h-10">
                   <Upload className="w-4 h-4 mr-2" />
-                  Upload
+                  Unggah
                 </Button>
               </div>
               {customCards.length > 0 && (
@@ -143,8 +143,8 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
             </div>
             
             <div className="text-sm text-muted-foreground flex justify-between">
-              <span>Added {customCards.length}/36 cards</span>
-              <span className="text-xs">(Click on "Upload" to select multiple files)</span>
+              <span>Ditambahkan {customCards.length}/36 kartu</span>
+              <span className="text-xs">(Klik pada "Unggah" untuk memilih beberapa file)</span>
             </div>
           </div>
           
@@ -181,7 +181,7 @@ const CardUploader: React.FC<CardUploaderProps> = ({ isOpen, onClose, onSaveCard
             className="w-full gap-2"
           >
             <Check className="w-4 h-4" />
-            Save and Use Custom Cards
+            Simpan dan Gunakan Kartu Kustom
           </Button>
         </DialogFooter>
       </DialogContent>

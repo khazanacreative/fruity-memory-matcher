@@ -8,12 +8,12 @@ const Index = () => {
       <header className="w-full max-w-6xl mx-auto px-4 py-6 flex flex-col items-center">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight text-center">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-            Memory Match Game
+            Permainan Kartu Memori
           </span>
         </h1>
         <p className="mt-3 text-gray-500 text-center max-w-xl">
-          Match pairs of cards to win the game. Play with 2-3 players and take turns finding matching pairs. 
-          Choose from icon cards (24 pairs), alphabet cards (A-Z), number cards (12-36), or upload up to 36 custom images!
+          Cocokkan pasangan kartu untuk memenangkan permainan. Main dengan 2-3 pemain dan bergiliran mencari pasangan kartu yang cocok.
+          Pilih dari kartu ikon (24 pasang), kartu alfabet (A-Z), kartu angka (12-36), atau unggah hingga 36 gambar khusus!
         </p>
       </header>
       
@@ -22,7 +22,7 @@ const Index = () => {
       </main>
       
       <footer className="w-full py-4 text-center text-gray-500 text-sm">
-        <p>Take turns to find all pairs and win! Use alphabet cards, number cards, or upload multiple custom images for more fun.</p>
+        <p>Bergiliran untuk menemukan semua pasangan dan menang! Gunakan kartu alfabet, kartu angka, atau unggah beberapa gambar khusus untuk keseruan lebih.</p>
       </footer>
     </div>
   );

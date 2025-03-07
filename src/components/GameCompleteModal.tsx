@@ -72,12 +72,12 @@ const GameCompleteModal: React.FC<GameCompleteModalProps> = ({
             </div>
           </div>
           <DialogTitle className="text-center text-2xl font-bold">
-            Game Complete!
+            Permainan Selesai!
           </DialogTitle>
           <DialogDescription className="text-center">
             {isMultipleWinners 
-              ? "It's a tie! Multiple players have the same score." 
-              : `${winner.name} wins with ${winner.score} pairs!`}
+              ? "Seri! Beberapa pemain memiliki skor yang sama." 
+              : `${winner.name} menang dengan ${winner.score} pasang!`}
           </DialogDescription>
         </DialogHeader>
         
@@ -85,19 +85,19 @@ const GameCompleteModal: React.FC<GameCompleteModalProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col items-center p-4 bg-secondary/50 rounded-xl">
               <Clock className="w-5 h-5 text-gray-600 mb-1" />
-              <span className="text-sm text-gray-500">Time</span>
+              <span className="text-sm text-gray-500">Waktu</span>
               <span className="text-lg font-semibold">{formatTime(time)}</span>
             </div>
             
             <div className="flex flex-col items-center p-4 bg-secondary/50 rounded-xl">
               <MousePointerClick className="w-5 h-5 text-gray-600 mb-1" />
-              <span className="text-sm text-gray-500">Total Moves</span>
+              <span className="text-sm text-gray-500">Total Langkah</span>
               <span className="text-lg font-semibold">{totalMoves}</span>
             </div>
           </div>
           
           <div className="mt-2">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Leaderboard</h3>
+            <h3 className="text-sm font-medium text-gray-500 mb-2">Papan Peringkat</h3>
             <div className="space-y-2">
               {sortedPlayers.map((player, index) => (
                 <div key={player.id} className="flex items-center justify-between p-2 rounded-lg bg-secondary/30">
@@ -127,7 +127,7 @@ const GameCompleteModal: React.FC<GameCompleteModalProps> = ({
         <DialogFooter className="sm:justify-center">
           <Button className="w-full sm:w-auto gap-2" onClick={onRestart}>
             <RotateCcw className="w-4 h-4" />
-            Play Again
+            Main Lagi
           </Button>
         </DialogFooter>
       </DialogContent>

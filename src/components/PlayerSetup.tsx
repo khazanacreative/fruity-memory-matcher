@@ -16,7 +16,7 @@ interface PlayerSetupProps {
 
 const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame }) => {
   const [numPlayers, setNumPlayers] = useState<number>(2);
-  const [playerNames, setPlayerNames] = useState<string[]>(['Player 1', 'Player 2', 'Player 3']);
+  const [playerNames, setPlayerNames] = useState<string[]>(['Pemain 1', 'Pemain 2', 'Pemain 3']);
   const [isCardUploaderOpen, setIsCardUploaderOpen] = useState(false);
   const [customCards, setCustomCards] = useState<CustomCardImage[]>([]);
   const [cardMode, setCardMode] = useState<CardType>('default');
@@ -61,16 +61,16 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center text-2xl font-bold">
-              Player Setup
+              Pengaturan Pemain
             </DialogTitle>
             <DialogDescription className="text-center">
-              Configure the number of players for your memory match game.
+              Atur jumlah pemain untuk permainan kartu memori Anda.
             </DialogDescription>
           </DialogHeader>
           
           <div className="flex flex-col gap-6 my-4">
             <div className="flex flex-col gap-2">
-              <Label>Number of Players</Label>
+              <Label>Jumlah Pemain</Label>
               <div className="flex gap-2">
                 {[2, 3].map((num) => (
                   <Button
@@ -80,21 +80,21 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
                     onClick={() => setNumPlayers(num)}
                   >
                     <Users className="w-4 h-4" />
-                    {num} Players
+                    {num} Pemain
                   </Button>
                 ))}
               </div>
             </div>
             
             <div className="flex flex-col gap-4">
-              <Label>Player Names</Label>
+              <Label>Nama Pemain</Label>
               {Array.from({ length: numPlayers }).map((_, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <User className="w-5 h-5 text-primary" />
                   <Input 
                     value={playerNames[index]} 
                     onChange={(e) => handleNameChange(index, e.target.value)}
-                    placeholder={`Player ${index + 1}`}
+                    placeholder={`Pemain ${index + 1}`}
                     className="flex-1"
                   />
                 </div>
@@ -102,14 +102,14 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
             </div>
             
             <div className="flex flex-col gap-2">
-              <Label>Game Cards</Label>
+              <Label>Kartu Permainan</Label>
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   variant={cardMode === 'default' ? "default" : "outline"}
                   className="flex-1 gap-2"
                   onClick={() => setCardMode('default')}
                 >
-                  Default Icons (24 pairs)
+                  Ikon Default (24 pasang)
                 </Button>
                 <Button
                   variant={cardMode === 'alphabet' ? "default" : "outline"}
@@ -117,7 +117,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
                   onClick={() => setCardMode('alphabet')}
                 >
                   <AlignJustify className="w-4 h-4" />
-                  Alphabet (A-Z)
+                  Alfabet (A-Z)
                 </Button>
                 <Button
                   variant={cardMode === 'numbers' ? "default" : "outline"}
@@ -125,7 +125,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
                   onClick={() => setCardMode('numbers')}
                 >
                   <Hash className="w-4 h-4" />
-                  Numbers (1-{numberPairs})
+                  Angka (1-{numberPairs})
                 </Button>
                 <Button
                   variant={cardMode === 'custom' ? "default" : "outline"}
@@ -133,7 +133,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
                   onClick={() => setIsCardUploaderOpen(true)}
                 >
                   <Images className="w-4 h-4" />
-                  Custom Images
+                  Gambar Kustom
                   {cardMode === 'custom' && customCards.length > 0 && (
                     <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
                       {customCards.length}
@@ -144,7 +144,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
               
               {cardMode === 'numbers' && (
                 <div className="flex items-center gap-2 mt-2">
-                  <Label className="text-sm">Number of pairs:</Label>
+                  <Label className="text-sm">Jumlah pasangan:</Label>
                   <Button 
                     size="icon" 
                     variant="outline" 
@@ -167,7 +167,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
                     <Plus className="h-4 w-4" />
                   </Button>
                   <span className="text-xs text-muted-foreground ml-auto">
-                    (12-36 pairs)
+                    (12-36 pasang)
                   </span>
                 </div>
               )}
@@ -176,7 +176,7 @@ const PlayerSetup: React.FC<PlayerSetupProps> = ({ isOpen, onClose, onStartGame 
           
           <DialogFooter>
             <Button className="w-full" onClick={handleStartGame}>
-              Start Game
+              Mulai Permainan
             </Button>
           </DialogFooter>
         </DialogContent>
